@@ -9,7 +9,7 @@ server.on('connection', function (client) {
     client.on('stream', function (stream, meta) {
         var fileWriter = new wav.FileWriter('demo.wav', {
             channels: 1,
-            sampleRate: 48000,
+            sampleRate: 44100,
             bitDepth: 16
         });
         stream.pipe(fileWriter);
