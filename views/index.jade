@@ -1,5 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Welcome to #{title}
+    div(ng-app="app")
+        div(ng-controller="RecordStop as vm")
+            #todo create a couple of buttons that drive the recording/stopping
+            input(type="text")
+            button(type="button" ng-click="vm.start()") Start
+            button(type="button" ng-click="vm.stop()") Stop
