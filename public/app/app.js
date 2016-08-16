@@ -11,6 +11,9 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
     svc.context = null;
     svc.micStream = null;
     svc.writeStream = null;
+    var meta = {
+        filename: svc.filename
+    }
 
     function record(callback) {
         tapMic(function() {
@@ -21,6 +24,7 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
     }
 
     function stop() {
+        svc.writeStream.end();
         svc.context.close();
         svc.client.close();
     }
@@ -37,8 +41,10 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
         svc.client = new BinaryClient('ws://localhost:9001');
 
         svc.client.on('open', function() {
-            // for the sake of this example let's put the stream in the window
-            svc.writeStream = svc.client.createStream();
+            if (!meta.filename) {
+                meta.filename = "default.wav"
+            }
+            svc.writeStream = svc.client.createStream(meta);
             if (callback) { callback() };
         });
     }
