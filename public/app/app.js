@@ -68,7 +68,9 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
 
     function recorderProcess(e) {
         var left = e.inputBuffer.getChannelData(0);
-        svc.writeStream.write(convertFloat32ToInt16(left));
+        //try not converting to int16
+        //svc.writeStream.write(convertFloat32ToInt16(left));
+        svc.writeStream.write(left);
     }
 
     function convertFloat32ToInt16(buffer) {
