@@ -1,3 +1,6 @@
+//TODO take values for recording quality and filename
+//TODO log user into their drive so the files can be uploaded to their google drive
+
 var app = angular.module("app", ["userMedia"]);
 
 app.factory("streamAudio", ["userMediaService", function(userMediaService){

@@ -7,6 +7,9 @@ var vorbis = require('vorbis');
 
 var server = binaryServer({port: 9001});
 
+//TODO take meta as opts and file name
+//TODO more performance testing. Compare client side compression to server side compression.
+
 server.on('connection', function (client) {
     var fileWriter = null;
     
@@ -16,18 +19,11 @@ server.on('connection', function (client) {
     });
     
     client.on('stream', function (stream, meta) {
-        // var writer = new wav.Writer({
-        //     channels: 1,
-        //     sampleRate: 44100,
-        //     bitDepth: 16
-        // });
-        //stream.pipe(writer);
         stream.pipe(ve);
         ve.pipe(oe.stream());
 
         stream.on('end', function() {
             console.log("mic readStream has ended.");
-            //writer.end();
             ve.end();
         });
 
@@ -35,16 +31,12 @@ server.on('connection', function (client) {
             drive.insert({
                 path: ['audio-test'],
                 title: 'demo-perf.ogg',
-                //body: writer
                 body:oe
             });
         });
     });
 
     client.on('close', function () {
-        // if (writer != null) {
-        //     writer.end();
-        // }
         if (ve != null) {
             ve.end();
         }
