@@ -1,7 +1,7 @@
 //TODO take values for recording quality and filename
 //TODO log user into their drive so the files can be uploaded to their google drive
 
-var app = angular.module("app", ["userMedia"]);
+var app = angular.module("app", ["userMedia", "ngRoute"]);
 
 app.factory("streamAudio", ["userMediaService", function(userMediaService){
 
@@ -97,4 +97,27 @@ app.controller("RecordStop", ["streamAudio", function(streamAudio) {
 
     vm.start = streamAudio.record;
     vm.stop = streamAudio.stop;
+}]);
+
+app.directive("signInWithGoogle", ["$http","$window", function($http, $window) {
+
+    return {
+        restrict: "E",
+        template: '<button type="button" ng-click="redirect()">Sign in With Google</button>',
+        link: function(scope, element, attrs) {
+            scope.redirect = function() {
+                $http({
+                    method: 'GET',
+                    url: '/api/generateAuthUrl'
+                }).then(function successCallback(response){
+                    //redirect to responded url
+                    var redirecturl = response.data;
+                    $window.location.href = redirecturl;
+                }, function errorCallback(response) {
+                    //TODOsome error handling
+                });
+            }
+        }
+    }
+
 }]);

@@ -5,7 +5,9 @@ block content
     p Welcome to #{title}
     div(ng-app="app")
         div(ng-controller="RecordStop as vm")
-            #todo create a couple of buttons that drive the recording/stopping
+            //todo create a couple of buttons that drive the recording/stopping
             input(type="text" ng-model="vm.filename")
             button(type="button" ng-click="vm.start()") Start
             button(type="button" ng-click="vm.stop()") Stop
+            //button(type="button") Login with Google
+            sign-in-with-google()

@@ -2,16 +2,11 @@ var fs = require('fs');
 var google = require('googleapis');
 var mime = require('mime-types');
 var queue = require('queue');
-var key = require('./appKey.json')
+var googleAuth = require('./local_modules/googleAuth.js')
+var key = require('./credentials/gdriveKey.json');
 var drive = google.drive({
     version: 'v2',
-    auth: new google.auth.JWT(
-        key.client_email,
-        null,
-        key.private_key,
-        ['https://www.googleapis.com/auth/drive'],
-        null
-    )
+    auth: googleAuth.getOauth2Client()
 });
 
 module.exports = {
