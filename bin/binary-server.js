@@ -1,6 +1,6 @@
 var binaryServer = require('binaryjs').BinaryServer;
 var wav = require('wav');
-var drive = require('../googleDrive.js');
+var drive = require('../local_modules/googleDrive.js');
 var fs = require('fs');
 var ogg = require('ogg');
 var vorbis = require('vorbis');
@@ -27,13 +27,15 @@ server.on('connection', function (client) {
             ve.end();
         });
 
-        drive.init(function() {
-            drive.insert({
-                path: ['audio-test'],
-                title: 'demo-perf.ogg',
-                body:oe
-            });
-        });
+        oe.pipe(fs.createWriteStream('test.ogg'));
+
+        // drive.init(function() {
+        //     drive.insert({
+        //         path: ['audio-test'],
+        //         title: 'demo-new.ogg',
+        //         body:oe
+        //     });
+        // });
     });
 
     client.on('close', function () {

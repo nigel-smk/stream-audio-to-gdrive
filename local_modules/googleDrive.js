@@ -2,7 +2,7 @@ var fs = require('fs');
 var google = require('googleapis');
 var mime = require('mime-types');
 var queue = require('queue');
-var key = require('./appKey.json')
+var key = require('./../credentials/gdriveKey.json')
 var drive = google.drive({
     version: 'v2',
     auth: new google.auth.JWT(
