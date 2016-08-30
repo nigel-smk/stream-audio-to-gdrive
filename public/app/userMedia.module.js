@@ -6,7 +6,7 @@ angular.module('userMedia', [])
         var _stream = null;
         var _err = null;
 
-        var mediaConstraint = { video: true, audio: true };
+        var mediaConstraint = { video: { frameRate: { ideal: 1 }, width: { max: 240 }, height: { max: 180 } }, audio: true };
         console.log('userMediaSvc | started');
         navigator.mediaDevices.getUserMedia(mediaConstraint)
             .then(onSuccess)

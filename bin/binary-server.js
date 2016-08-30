@@ -1,9 +1,6 @@
 var binaryServer = require('binaryjs').BinaryServer;
-var wav = require('wav');
-var drive = require('../local_modules/googleDrive.js');
+//var drive = require('../local_modules/googleDrive.js');
 var fs = require('fs');
-var ogg = require('ogg');
-var vorbis = require('vorbis');
 
 var server = binaryServer({port: 9001});
 
@@ -13,21 +10,13 @@ var server = binaryServer({port: 9001});
 server.on('connection', function (client) {
     var fileWriter = null;
     
-    var oe = new ogg.Encoder();
-    var ve = new vorbis.Encoder({
-        channels: 1
-    });
-    
     client.on('stream', function (stream, meta) {
-        stream.pipe(ve);
-        ve.pipe(oe.stream());
 
         stream.on('end', function() {
             console.log("mic readStream has ended.");
-            ve.end();
         });
 
-        oe.pipe(fs.createWriteStream('test.ogg'));
+        stream.pipe(fs.createWriteStream('test.ogv'));
 
         // drive.init(function() {
         //     drive.insert({
@@ -38,9 +27,9 @@ server.on('connection', function (client) {
         // });
     });
 
-    client.on('close', function () {
-        if (ve != null) {
-            ve.end();
-        }
-    });
+    // client.on('close', function () {
+    //     if (ve != null) {
+    //         ve.end();
+    //     }
+    // });
 });

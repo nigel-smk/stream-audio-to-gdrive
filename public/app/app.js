@@ -28,7 +28,7 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
 
     function stop() {
         svc.writeStream.end();
-        svc.context.close();
+        svc.mediaRecorder.stop();
         svc.client.close();
     }
 
@@ -53,36 +53,12 @@ app.factory("streamAudio", ["userMediaService", function(userMediaService){
     }
 
     function initializeRecorder(stream, callback) {
-        var audioContext = window.AudioContext;
-        svc.context = new audioContext();
-        var audioInput = svc.context.createMediaStreamSource(stream);
-        var bufferSize = 1024;
-        // create a javascript node
-        var recorder = svc.context.createScriptProcessor(bufferSize, 1, 1);
-        // specify the processing function
-        recorder.onaudioprocess = recorderProcess;
-        // connect stream to our recorder
-        audioInput.connect(recorder);
-        // connect our recorder to the client's speakers?
-        //this can't be what is happening
-        recorder.connect(svc.context.destination);
+        svc.mediaRecorder = new MediaRecorder(stream, { 'type': 'video/ogv; codecs=opus' });
+        svc.mediaRecorder.ondataavailable = function(event) {
+            svc.writeStream.write(event.data);
+        };
+        svc.mediaRecorder.start();
         if (callback) { callback() };
-    }
-
-    function recorderProcess(e) {
-        var left = e.inputBuffer.getChannelData(0);
-        //try not converting to int16
-        //svc.writeStream.write(convertFloat32ToInt16(left));
-        svc.writeStream.write(left);
-    }
-
-    function convertFloat32ToInt16(buffer) {
-        l = buffer.length;
-        buf = new Int16Array(l);
-        while (l--) {
-            buf[l] = Math.min(1, buffer[l])*0x7FFF;
-        }
-        return buf.buffer;
     }
 
     return {
